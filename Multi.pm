@@ -34,7 +34,7 @@ use Exporter;
 # old syntax for PERL 5.004 compat
 use vars qw( $VERSION @ISA @EXPORT_OK );
 
-$VERSION	= '1.00';
+$VERSION	= '1.01';
 @ISA		= qw( Exporter );
 @EXPORT_OK	= qw( &walk &other &otherpkg );
 
@@ -87,7 +87,7 @@ sub walk(&$;@) {
 		# push $class's supers to stack
 		{
 			no strict 'refs';	# access symbol table
-			unshift @stack, @{"$class\::ISA"};
+			unshift @stack, @{$class.'::ISA'};
 		}
 
 		# found a class in the avoidance list
@@ -143,8 +143,9 @@ sub other($$) {
 
 	# symbol table lookup would be undef if the method doesn't exist
 	return walk {
+		my $pkg = shift;
 		no strict 'refs';
-		\&{"$_\::$name"}
+		*{$pkg.'::'.$name}{CODE};
 	} $origin, $caller;
 }
 
@@ -167,8 +168,9 @@ sub otherpkg($$) {
 
 	# symbol table lookup would be undef if the method doesn't exist
 	return walk {
+		my $pkg = shift;
 		no strict 'refs';
-		\&{"$_\::$name"} ? $_ : undef;
+		( *{$pkg.'::'.$name}{CODE} ) ? $pkg : undef;
 	} $origin, $caller;
 }
 
@@ -179,7 +181,7 @@ sub otherpkg($$) {
 
 Syntactic sugar.
 
-Equivalent to C<< &{other( $this, 'mymethod' )( @myargs )}; >>.
+Equivalent to C<< &{other( $this, 'mymethod' )}( $this, @myargs ); >>.
 
 Like C<SUPER::>, C<OTHER::> expects the requested method to exist.
 If it does not, an exception is thrown.
