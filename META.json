@@ -1,12 +1,12 @@
 {
-   "abstract" : "unknown",
+   "abstract" : "Multiple inheritance support functions.",
    "author" : [
-      "unknown"
+      "Kevin Cody-Little <kcody@cpan.org>"
    ],
    "dynamic_config" : 1,
    "generated_by" : "ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.120921",
    "license" : [
-      "unknown"
+      "lgpl_2_1"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -31,9 +31,17 @@
          }
       },
       "runtime" : {
-         "requires" : {}
+         "requires" : {
+            "Carp" : "0",
+            "Exporter" : "0"
+         }
       }
    },
    "release_status" : "stable",
-   "version" : "1.01"
+   "resources" : {
+      "repository" : {
+         "url" : "https://github.com/kcodyjr/class-multi"
+      }
+   },
+   "version" : "1.02"
 }
